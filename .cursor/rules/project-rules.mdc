@@ -1,0 +1,190 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+ # プロジェクトルール
+
+## 開発環境
+### 必須環境
+- Node.js: v22.0.0以上23.0.0未満
+- パッケージマネージャー: pnpm v10.7.0
+- TypeScript: v5.8.2以上
+- Next.js: v15.2.4
+
+## コードスタイル
+### TypeScript/JavaScript
+#### 命名規則
+- 変数名: camelCase
+- コンポーネント名: PascalCase
+- インターフェース名: PascalCase（Iプレフィックスなし）
+- 型名: PascalCase
+- 定数: UPPER_SNAKE_CASE
+- プライベートメンバー: _プレフィックス
+
+#### ファイル構成
+- コンポーネント: `components/`ディレクトリ
+- ページ: `app/`ディレクトリ
+- 型定義: `types/`ディレクトリ
+- ユーティリティ: `utils/`ディレクトリ
+- フック: `hooks/`ディレクトリ
+
+#### コード品質ルール
+- ESLintを使用したコード品質管理
+- 未使用の変数は警告（argsIgnorePattern: "^_"を除く）
+- console.logの使用は警告
+- 匿名のデフォルトエクスポートは許可
+- インポート順序:
+  1. React関連
+  2. 外部ライブラリ
+  3. 内部コンポーネント
+  4. 型定義
+  5. ユーティリティ
+
+### インフラストラクチャ
+#### AWS CDK設定
+- リージョン: ap-northeast-1（東京）
+- 環境変数:
+  - NODE_ENV: production
+  - NEXT_TELEMETRY_DISABLED: 1
+  - HOSTNAME: 0.0.0.0
+  - APP_ENV: 環境名（dev/stg/prod）
+
+#### App Runnerサービス設定
+- CPU: 1 vCPU
+- メモリ: 2GB
+- ポート: 3000
+- 自動デプロイ: 無効
+- スケーリング設定:
+  - 最小インスタンス: 1
+  - 最大インスタンス: 10
+  - 同時リクエスト数: 100
+
+#### セキュリティ設定
+- HTTPS強制
+- セキュリティヘッダー設定
+- クロスオリジン設定
+- レート制限
+
+## プロジェクト構造
+### モノレポ構成
+- pnpm workspace
+- パッケージ構成:
+  - apps/main-app/web-app: Next.jsアプリケーション
+  - apps/main-app/tenant-infra: インフラストラクチャ定義
+
+### ディレクトリ構造
+```
+apps/
+  main-app/
+    web-app/
+      app/              # Next.js 13+ App Router
+      components/       # 共通コンポーネント
+      hooks/           # カスタムフック
+      types/           # 型定義
+      utils/           # ユーティリティ関数
+      styles/          # グローバルスタイル
+      tests/           # テストファイル
+    tenant-infra/
+      lib/             # CDKスタック定義
+      constructs/      # CDKコンストラクト
+      bin/             # CDKエントリーポイント
+```
+
+## ビルドとテスト
+### ビルドプロセス
+- ビルド: `pnpm build`
+  - TypeScriptコンパイル
+  - Next.jsビルド
+  - CDK合成
+- テスト: `pnpm test`
+  - Jest実行
+  - カバレッジレポート生成
+- リント: `pnpm lint`
+  - ESLint実行
+  - Prettierチェック
+- クリーン: `pnpm clean`
+  - ビルド成果物削除
+  - 依存関係クリーンアップ
+
+### テスト環境
+#### テストツール
+- Jest + Testing Library
+- React Testing Library
+- Jest DOM
+
+#### テストルール
+- コンポーネントテスト必須
+- ユニットテスト推奨
+- テストカバレッジ目標: 80%以上
+- テストファイル命名: `*.test.ts(x)`
+
+## スタイリング
+### CSSフレームワーク
+- Tailwind CSS
+- PostCSS
+- Autoprefixer
+
+### スタイリングルール
+- コンポーネント固有のスタイルはCSS Modules
+- グローバルスタイルは`styles/globals.css`
+- Tailwindのカスタム設定は`tailwind.config.js`
+- レスポンシブデザイン必須
+
+## コード品質
+### 静的解析
+- ESLint
+  - TypeScript
+  - React
+  - Next.js
+- Prettier
+  - シングルクォート
+  - セミコロン必須
+  - タブ幅: 2スペース
+
+### 型チェック
+- TypeScript厳格モード
+- 暗黙的なany型禁止
+- 未使用の変数警告
+- 戻り値の型明示
+
+## インフラストラクチャ命名規則
+### リソース命名
+- プレフィックス: `${appName}-${envName}`
+- 環境変数: APP_ENVで環境を指定
+- タグ付け:
+  - Environment: ${envName}
+  - Project: ${appName}
+  - ManagedBy: CDK
+
+### デプロイメント
+- 環境ごとのデプロイ
+- ブルー/グリーンデプロイメント
+- ロールバック手順
+- バックアップ戦略
+
+## ドキュメント
+### 必須ドキュメント
+- README.md
+- API仕様書
+- デプロイメントガイド
+- トラブルシューティングガイド
+
+### コメント規約
+- JSDoc形式のコメント
+- 複雑なロジックの説明
+- TODO/FIXMEコメントの使用
+- 変更履歴の記録
+
+## バージョン管理
+### Git運用
+- ブランチ戦略: Git Flow
+- コミットメッセージ: Conventional Commits
+- PRレビュー必須
+- マージ保護ルール
+
+### リリース管理
+- セマンティックバージョニング
+- 変更ログの自動生成
+- リリースノートの作成
+- デプロイメントタグ付け
