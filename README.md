@@ -1,158 +1,110 @@
-## 開発環境セットアップ
+# App Runner Next.js CDK
 
-### Node.jsとpnpmのバージョン管理
+AWS App Runnerを使用してNext.jsアプリケーションをデプロイするためのCDKプロジェクトです。
 
-本プロジェクトではasdfを使用したバージョン管理を推奨しています。
-
-**理由**：  
-プロジェクトルートの`.tool-versions`ファイルでNode.jsとpnpmのバージョンを管理しており、asdfを使用することで全開発者が同一のバージョンを簡単に使用できるためです。
-
-```bash
-# asdfがインストールされていない場合
-brew install asdf
-
-# プラグインの追加
-asdf plugin add nodejs  # Node.jsプラグインがまだない場合
-asdf plugin add pnpm    # pnpmプラグインがまだない場合
-
-# プロジェクトに指定されたバージョンのインストールと適用
-cd プロジェクトディレクトリ
-asdf install  # すべてのツールをインストール
-```
-
-**現在(2025年4月時点)の使用バージョン**：
-
-- Node.js: 22.14.0
-- pnpm: 10.7.0
-
-### パッケージマネージャ
-
-本プロジェクトではパッケージマネージャとして**pnpm**を使用しています。npmやyarnではなく、必ずpnpmを使用してください。
-
-**理由**：
-
-- 高速なインストール
-- ディスク容量の節約
-- モノレポの優れたサポート
-
-```bash
-# pnpmがインストールされていない場合
-npm install -g pnpm
-
-# 依存関係のインストール
-pnpm install
-
-# パッケージの追加（プロジェクトルートの場合）
-pnpm add <パッケージ名>
-
-# 特定のワークスペースにパッケージを追加
-pnpm add <パッケージ名> --filter <ワークスペース名>
-例: pnpm add react --filter @sb/web-app
-```
-
-## プロジェクト構成
-
-### プロジェクト構造
-
-本プロジェクトはモノレポ構造を採用しています。主要なディレクトリは以下の通りです：
-
-- `apps/`: アプリケーション
-
-  - `main-app/`: メインアプリケーション
-    - `web-app/`: Webアプリケーション（Next.js）
-    - `tenant-infra/`: テナントインフラストラクチャ(AWS CDK)
-
-- `scripts/`: プロジェクト全体で使用するスクリプト
-
-## デプロイガイドライン
-
-### 前提条件
+## 前提条件
 
 - Node.js: v22.0.0以上23.0.0未満
 - pnpm: v10.7.0
-- AWS CLI (設定済み)
-- AWS CDK v2
+- AWS CLI: 設定済み
+- AWS CDK: インストール済み
 
-### 初期セットアップ
+## セットアップ
 
-1. AWS CLIの設定
+1. リポジトリのクローン
 
 ```bash
-# AWS CLIの設定
-aws configure
-# AWS Access Key ID, Secret Access Key, Default region name (ap-northeast-1), Default output format (json)を入力
+git clone <repository-url>
+cd apprunner-nextjs-cdk
 ```
 
-2. プロジェクトのセットアップ
+2. 依存関係のインストール
 
 ```bash
-# プロジェクトのルートディレクトリで実行
 pnpm install
+```
 
-# テナントインフラディレクトリに移動
+3. 環境変数の設定
+
+```bash
+cp .env.example .env
+```
+
+`.env`ファイルを編集して、必要な環境変数を設定します。
+
+## 環境変数
+
+| 変数名                  | 説明                        | デフォルト値     |
+| ----------------------- | --------------------------- | ---------------- |
+| APP_NAME                | アプリケーション名          | apprunner-nextjs |
+| APP_ENV                 | アプリケーション環境        | dev              |
+| AWS_REGION              | AWSリージョン               | ap-northeast-1   |
+| AWS_ACCOUNT_ID          | AWSアカウントID             | -                |
+| HOSTED_ZONE_NAME        | Route53ホストゾーン名       | -                |
+| SUBDOMAIN_NAME          | サブドメイン名              | -                |
+| APP_RUNNER_CPU          | App Runner CPU設定          | 1                |
+| APP_RUNNER_MEMORY       | App Runner メモリ設定       | 2                |
+| APP_RUNNER_PORT         | App Runner ポート設定       | 3000             |
+| APP_RUNNER_AUTO_DEPLOY  | App Runner 自動デプロイ設定 | false            |
+| NEXT_TELEMETRY_DISABLED | Next.js テレメトリ無効化    | 1                |
+| NODE_ENV                | Node.js 環境                | production       |
+| HOSTNAME                | ホスト名                    | 0.0.0.0          |
+| CDK_DEPLOY_ENVIRONMENT  | CDKデプロイ環境             | dev              |
+
+## デプロイ
+
+### 自動デプロイ
+
+```bash
+chmod +x deploy.sh
+./deploy.sh
+```
+
+### 手動デプロイ
+
+```bash
 cd apps/main-app/tenant-infra
-
-
-# AWSアカウントのブートストラップ（初回のみ）
-pnpm run bootstrap
+npx cdk deploy --context environment=dev --context hostedZoneName=example.com --context subdomainName=app
 ```
 
-## 開発フロー
+## アーキテクチャ
 
-1. コードの変更
+このプロジェクトは以下のAWSリソースを使用します：
 
-```bash
-# 変更を監視してコンパイル
-pnpm run watch
-```
+- AWS App Runner: Next.jsアプリケーションのホスティング
+- Amazon ECR: Dockerイメージの保存
+- Route53: ドメイン名の管理
+- IAM: アクセス権限の管理
 
-2. 変更の確認
+## ベストプラクティス
 
-```bash
-# デプロイ前の変更確認
-pnpm run diff
-```
+- App Runnerの設定
 
-3. デプロイ
+  - 適切なCPUとメモリ設定
+  - ヘルスチェックの設定
+  - 環境変数の設定
+  - IAMロールの適切な設定
+  - Dockerイメージの最適化
 
-```bash
-# スタックのデプロイ
-pnpm run deploy
-```
-
-## 便利なコマンド
-
-- `pnpm run build` - TypeScriptのコンパイル
-- `pnpm run watch` - 変更を監視してコンパイル
-- `pnpm run test` - Jestによるユニットテストの実行
-- `pnpm run deploy` - スタックをデフォルトのAWSアカウント/リージョンにデプロイ
-- `pnpm run diff` - デプロイ済みスタックと現在の状態を比較
-- `pnpm run synth` - CloudFormationテンプレートの合成
-- `pnpm run destroy` - デプロイしたスタックを削除
+- Route53の設定
+  - 既存のホストゾーンを参照
+  - サブドメインのレコードを作成
+  - App Runnerサービスへのエイリアス設定
 
 ## トラブルシューティング
 
-1. デプロイエラーが発生した場合
+### デプロイエラー
 
-```bash
-# スタックの状態を確認
-pnpm run synth
+- `.env`ファイルが正しく設定されているか確認してください。
+- AWS認証情報が正しく設定されているか確認してください。
+- Route53のホストゾーンが存在するか確認してください。
 
-# エラーメッセージを確認し、必要に応じてスタックを削除して再デプロイ
-pnpm run destroy
-pnpm run deploy
-```
+### App Runnerエラー
 
-2. 依存関係の問題が発生した場合
+- Dockerイメージが正しくビルドされているか確認してください。
+- 環境変数が正しく設定されているか確認してください。
+- IAMロールが正しく設定されているか確認してください。
 
-```bash
-# node_modulesを削除して再インストール
-rm -rf node_modules
-pnpm install
-```
+## ライセンス
 
-## 注意事項
-
-- 本番環境へのデプロイは必ずレビュー後に実行してください
-- 環境変数は`.env`ファイルで管理し、Gitにコミットしないでください
-- リソースの命名規則は`${appName}-${envName}`に従ってください
+MIT

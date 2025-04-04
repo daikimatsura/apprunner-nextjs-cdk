@@ -6,3 +6,9 @@ node_modules
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+
+# 環境変数
+.env
+.env.*
+!.env.example
+cdk.context.json

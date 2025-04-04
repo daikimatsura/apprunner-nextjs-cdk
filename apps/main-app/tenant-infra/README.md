@@ -1,29 +1,49 @@
-# テナントインフラCDKプロジェクト
+# Tenant Infrastructure
 
-このプロジェクトはCDK TypeScriptを使用したテナントインフラ管理のためのプロジェクトです。
+このプロジェクトはAWS CDKを使用してApp Runnerサービスとカスタムドメイン設定を自動化するインフラストラクチャコードを提供します。
 
-## 前提条件
+## 環境変数の設定
 
-- Node.js (v14以上)
-- AWS CLI (設定済み)
-- AWS CDK v2
+デプロイのために、以下の環境変数を設定する必要があります。`.env`ファイルをプロジェクトルートに作成してください（`.env.example`からコピーできます）。
 
-## セットアップ
+```
+# アプリケーション設定
+APP_NAME=apprunner-nextjs
+ENVIRONMENT=dev
 
-```bash
-# 依存関係のインストール
-npm install
+# ドメイン設定
+HOSTED_ZONE_NAME=yourdomain.com  # Route53で管理しているドメイン名
+SUBDOMAIN_NAME=app               # サブドメイン（app.yourdomain.com）
 
-# AWSアカウントのブートストラップ（初回のみ）
-npm run bootstrap
+# AWS設定
+REGION=ap-northeast-1
 ```
 
-## 便利なコマンド
+## デプロイ手順
 
-- `npm run build` TypeScriptのコンパイル
-- `npm run watch` 変更を監視してコンパイル
-- `npm run test` Jestによるユニットテストの実行
-- `npm run deploy` スタックをデフォルトのAWSアカウント/リージョンにデプロイ
-- `npm run diff` デプロイ済みスタックと現在の状態を比較
-- `npm run synth` CloudFormationテンプレートの合成
-- `npm run destroy` デプロイしたスタックを削除
+1. プロジェクトのセットアップ
+
+```bash
+pnpm install
+```
+
+2. ビルド
+
+```bash
+pnpm run build
+```
+
+3. デプロイ
+
+```bash
+pnpm run deploy -- --profile your-aws-profile
+```
+
+## カスタムドメインの設定
+
+カスタムドメインを設定するには、以下の条件を満たす必要があります：
+
+1. Route53でホストゾーンが設定済みであること
+2. `.env`ファイルに`HOSTED_ZONE_NAME`と`SUBDOMAIN_NAME`が正しく設定されていること
+
+デプロイ後、ACM証明書の検証が完了するまで数分かかることがあります。検証が完了すると、App Runnerサービスのカスタムドメインタブにドメインが表示されます。
