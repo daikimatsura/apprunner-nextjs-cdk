@@ -181,8 +181,8 @@ export class NextJsAppRunnerService extends Construct {
       directory: projectRoot,
       file: path.relative(projectRoot, dockerfilePath),
       exclude: [
-        "apps/main-app/tenant-infra/cdk.out",
-        "apps/main-app/tenant-infra/node_modules",
+        "apps/main-app/infra/cdk.out",
+        "apps/main-app/infra/node_modules",
       ],
       platform: ecrAssets.Platform.LINUX_AMD64,
       buildArgs: {

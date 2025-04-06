@@ -1,10 +1,10 @@
 import * as cdk from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
-import * as TenantInfra from "../lib/stacks/tenant-infra-stack";
+import * as Infra from "../lib/stacks/infra-stack";
 
 describe("TenantInfraStack", () => {
   const app = new cdk.App();
-  const stack = new TenantInfra.TenantInfraStack(app, "MyTestStack", {
+  const stack = new Infra.InfraStack(app, "MyTestStack", {
     env: { account: "123456789012", region: "ap-northeast-1" },
     envName: "test",
     appName: "test-app",

@@ -1,5 +1,5 @@
 {
-  "app": "node bin/tenant-infra.js",
+  "app": "npx ts-node --prefer-ts-exts bin/infra.ts",
   "watch": {
     "include": ["**"],
     "exclude": [

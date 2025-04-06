@@ -7,7 +7,7 @@ import { Cpu, Memory } from "@aws-cdk/aws-apprunner-alpha";
 /**
  * テナントインフラストラクチャスタックのプロパティ
  */
-export interface TenantInfraStackProps extends cdk.StackProps {
+export interface InfraStackProps extends cdk.StackProps {
   /**
    * 環境名 (dev/stg/prod)
    */
@@ -30,10 +30,10 @@ export interface TenantInfraStackProps extends cdk.StackProps {
 }
 
 /**
- * テナントインフラストラクチャスタック
+ * インフラストラクチャスタック
  * このスタックはApp Runnerサービスとカスタムドメイン設定を管理します。
  */
-export class TenantInfraStack extends cdk.Stack {
+export class InfraStack extends cdk.Stack {
   /**
    * App Runnerサービス
    */
@@ -49,10 +49,10 @@ export class TenantInfraStack extends cdk.Stack {
    */
   public readonly webAppUrl: string;
 
-  constructor(scope: Construct, id: string, props: TenantInfraStackProps) {
+  constructor(scope: Construct, id: string, props: InfraStackProps) {
     super(scope, id, {
       ...props,
-      description: `${props.appName} tenant infrastructure for ${props.envName} environment`,
+      description: `${props.appName} infrastructure for ${props.envName} environment`,
       crossRegionReferences: true,
       tags: {
         Application: props.appName,

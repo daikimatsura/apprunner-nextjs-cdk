@@ -63,7 +63,7 @@ chmod +x deploy.sh
 ### 手動デプロイ
 
 ```bash
-cd apps/main-app/tenant-infra
+cd apps/main-app/infra
 npx cdk deploy --context environment=dev --context hostedZoneName=example.com --context subdomainName=app
 ```
 

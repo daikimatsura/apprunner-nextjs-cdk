@@ -31,7 +31,7 @@ const eslintConfig = [
       "**/build/**",
       "**/.next/**",
       "**/coverage/**",
-      "**/apps/main-app/tenant-infra/**",
+      "**/apps/main-app/infra/**",
       "**/cdk.out/**",
     ],
   },

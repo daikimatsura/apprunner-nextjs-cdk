@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import "source-map-support/register";
 import * as cdk from "aws-cdk-lib";
-import { TenantInfraStack } from "../lib/stacks/tenant-infra-stack";
+import { InfraStack } from "../lib/stacks/infra-stack";
 import * as dotenv from "dotenv";
 import * as path from "path";
 
@@ -19,7 +19,7 @@ const hostedZoneName = process.env.HOSTED_ZONE_NAME;
 const subdomainName = process.env.SUBDOMAIN_NAME;
 
 // スタックを作成
-new TenantInfraStack(app, `${appName}-${environmentName}-Stack`, {
+new InfraStack(app, `${appName}-${environmentName}-Stack`, {
   // 環境設定
   envName: environmentName,
   appName,

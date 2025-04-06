@@ -71,7 +71,7 @@ alwaysApply: true
 - pnpm workspace
 - パッケージ構成:
   - apps/main-app/web-app: Next.jsアプリケーション
-  - apps/main-app/tenant-infra: インフラストラクチャ定義
+  - apps/main-app/infra: インフラストラクチャ定義
 
 ### ディレクトリ構造
 ```
@@ -85,7 +85,7 @@ apps/
       utils/           # ユーティリティ関数
       styles/          # グローバルスタイル
       tests/           # テストファイル
-    tenant-infra/
+    infra/
       lib/             # CDKスタック定義
       constructs/      # CDKコンストラクト
       bin/             # CDKエントリーポイント

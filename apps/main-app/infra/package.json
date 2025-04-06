@@ -1,8 +1,8 @@
 {
-  "name": "tenant-infra",
+  "name": "infra",
   "version": "1.0.0",
   "bin": {
-    "tenant-infra": "bin/tenant-infra.ts"
+    "infra": "bin/infra.ts"
   },
   "scripts": {
     "build": "tsc",
