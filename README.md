@@ -32,39 +32,11 @@ cp .env.example .env
 
 `.env`ファイルを編集して、必要な環境変数を設定します。
 
-## 環境変数
-
-| 変数名                  | 説明                        | デフォルト値     |
-| ----------------------- | --------------------------- | ---------------- |
-| APP_NAME                | アプリケーション名          | apprunner-nextjs |
-| APP_ENV                 | アプリケーション環境        | dev              |
-| AWS_REGION              | AWSリージョン               | ap-northeast-1   |
-| AWS_ACCOUNT_ID          | AWSアカウントID             | -                |
-| HOSTED_ZONE_NAME        | Route53ホストゾーン名       | -                |
-| SUBDOMAIN_NAME          | サブドメイン名              | -                |
-| APP_RUNNER_CPU          | App Runner CPU設定          | 1                |
-| APP_RUNNER_MEMORY       | App Runner メモリ設定       | 2                |
-| APP_RUNNER_PORT         | App Runner ポート設定       | 3000             |
-| APP_RUNNER_AUTO_DEPLOY  | App Runner 自動デプロイ設定 | false            |
-| NEXT_TELEMETRY_DISABLED | Next.js テレメトリ無効化    | 1                |
-| NODE_ENV                | Node.js 環境                | production       |
-| HOSTNAME                | ホスト名                    | 0.0.0.0          |
-| CDK_DEPLOY_ENVIRONMENT  | CDKデプロイ環境             | dev              |
-
 ## デプロイ
-
-### 自動デプロイ
-
-```bash
-chmod +x deploy.sh
-./deploy.sh
-```
-
-### 手動デプロイ
 
 ```bash
 cd apps/main-app/infra
-npx cdk deploy --context environment=dev --context hostedZoneName=example.com --context subdomainName=app
+npx cdk deploy --all --profile {profile_name}
 ```
 
 ## アーキテクチャ
